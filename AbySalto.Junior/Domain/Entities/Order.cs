@@ -16,4 +16,7 @@ public class Order
    public string Address { get; set; } = string.Empty; 
    public string PhoneNumber { get; set; }= string.Empty; 
    public string Notes { get; set; }= string.Empty; 
+   
+  
+   public ICollection<Article> Articles { get; set; } = new List<Article>();
 }

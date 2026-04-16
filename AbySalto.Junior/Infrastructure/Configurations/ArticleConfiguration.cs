@@ -13,10 +13,6 @@ public class ArticleConfiguration : IEntityTypeConfiguration<Article>
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id)
             .ValueGeneratedOnAdd();
-        builder.HasOne(a => a.Order)
-            .WithMany()
-            .HasForeignKey(a => a.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
         builder.Property(a => a.Name)
             .IsRequired()
             .HasMaxLength(100);

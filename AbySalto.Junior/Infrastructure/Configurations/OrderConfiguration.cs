@@ -32,5 +32,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasMaxLength(15);
         builder.Property(o => o.Notes)
             .HasMaxLength(200);
+        builder.HasMany(o => o.Articles)
+            .WithMany();
     }
 }

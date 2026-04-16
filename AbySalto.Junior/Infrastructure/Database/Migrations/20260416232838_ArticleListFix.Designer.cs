@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AbySalto.Junior.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260416213412_Initial")]
-    partial class Initial
+    [Migration("20260416232838_ArticleListFix")]
+    partial class ArticleListFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,15 +41,10 @@ namespace AbySalto.Junior.Infrastructure.Database.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(5,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Articles", (string)null);
                 });
@@ -98,15 +93,34 @@ namespace AbySalto.Junior.Infrastructure.Database.Migrations
                     b.ToTable("Orders", (string)null);
                 });
 
-            modelBuilder.Entity("AbySalto.Junior.Domain.Entities.Article", b =>
+            modelBuilder.Entity("ArticleOrder", b =>
                 {
-                    b.HasOne("AbySalto.Junior.Domain.Entities.Order", "Order")
+                    b.Property<Guid>("ArticlesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ArticlesId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ArticleOrder");
+                });
+
+            modelBuilder.Entity("ArticleOrder", b =>
+                {
+                    b.HasOne("AbySalto.Junior.Domain.Entities.Article", null)
+                        .WithMany()
+                        .HasForeignKey("ArticlesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AbySalto.Junior.Domain.Entities.Order", null)
                         .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

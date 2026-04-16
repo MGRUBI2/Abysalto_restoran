@@ -34,10 +34,10 @@ namespace AbySalto.Junior.Infrastructure.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Price = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
-                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,8 +46,7 @@ namespace AbySalto.Junior.Infrastructure.Database.Migrations
                         name: "FK_Articles_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

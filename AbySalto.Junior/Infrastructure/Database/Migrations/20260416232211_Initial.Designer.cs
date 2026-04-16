@@ -3,6 +3,7 @@ using System;
 using AbySalto.Junior.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AbySalto.Junior.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260416232211_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,10 +41,15 @@ namespace AbySalto.Junior.Infrastructure.Database.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uuid");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(5,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Articles", (string)null);
                 });
@@ -90,34 +98,16 @@ namespace AbySalto.Junior.Infrastructure.Database.Migrations
                     b.ToTable("Orders", (string)null);
                 });
 
-            modelBuilder.Entity("ArticleOrder", b =>
+            modelBuilder.Entity("AbySalto.Junior.Domain.Entities.Article", b =>
                 {
-                    b.Property<Guid>("ArticlesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ArticlesId", "OrderId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("ArticleOrder");
+                    b.HasOne("AbySalto.Junior.Domain.Entities.Order", null)
+                        .WithMany("Articles")
+                        .HasForeignKey("OrderId");
                 });
 
-            modelBuilder.Entity("ArticleOrder", b =>
+            modelBuilder.Entity("AbySalto.Junior.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("AbySalto.Junior.Domain.Entities.Article", null)
-                        .WithMany()
-                        .HasForeignKey("ArticlesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AbySalto.Junior.Domain.Entities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

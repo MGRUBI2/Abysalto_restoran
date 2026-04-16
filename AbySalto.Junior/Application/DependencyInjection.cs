@@ -1,0 +1,18 @@
+﻿using AbySalto.Junior.Application.Dto;
+using AbySalto.Junior.Application.Interfaces;
+using AbySalto.Junior.Application.Mapper;
+using AbySalto.Junior.Application.Services;
+using AbySalto.Junior.Domain.Entities;
+
+namespace AbySalto.Junior.Application;
+
+public static class DependencyInjection
+{
+   public static IServiceCollection AddApplication(this IServiceCollection services)
+   {
+      services.AddSingleton <IMapper<Order, OrderCreationRequestDto>,OrderMapper>()
+         .AddScoped<IOrderService,OrderService>();
+      
+      return services;
+   }
+}

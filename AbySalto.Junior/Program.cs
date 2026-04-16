@@ -1,4 +1,6 @@
 
+using AbySalto.Junior.Application;
+using AbySalto.Junior.Infrastructure;
 using AbySalto.Junior.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -11,6 +13,8 @@ namespace AbySalto.Junior
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddApplication();
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             
