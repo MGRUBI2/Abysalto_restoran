@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AbySalto.Junior.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AbySalto.Junior.Infrastructure.Database
 {
@@ -6,7 +7,12 @@ namespace AbySalto.Junior.Infrastructure.Database
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) { }
+            : base(options) {}
+        
+
+        public DbSet<Article> Articles => Set<Article>();
+        public DbSet<Order> Orders => Set<Order>();
+        
 
 
 

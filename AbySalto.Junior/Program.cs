@@ -13,6 +13,17 @@ namespace AbySalto.Junior
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
+            
+            
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFetch", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -21,7 +32,7 @@ namespace AbySalto.Junior
             });
 
             builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));//M.G: changed parts of code to fit for postgresql 
 
             var app = builder.Build();
 
@@ -39,6 +50,8 @@ namespace AbySalto.Junior
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
+            
+            app.UseCors("AllowFetch");
 
             app.MapControllers();
             app.Run();
