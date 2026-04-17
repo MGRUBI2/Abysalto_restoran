@@ -20,7 +20,12 @@ public class OrderMapper : IMapper<Order,BackendOrderCreationRequestDto>
             Address = dto.Address,
             PhoneNumber = dto.PhoneNumber,
             Notes = dto.Notes,
-            Articles =dto.Articles
+            Articles =dto.Articles.Select(a => new Article{
+                Id=a.Id,
+                Name = a.Name,
+                Description = a.Description,
+                Price = a.Price
+                }).ToList()
         };
     }
 }

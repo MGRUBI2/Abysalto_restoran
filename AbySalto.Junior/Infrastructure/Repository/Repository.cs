@@ -20,7 +20,7 @@ public abstract class Repository<T> : IRepository<T> where T : class
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public virtual async Task<IEnumerable<T>> GetAllAsync()
         => await _dbSet.ToListAsync();
 
     public async Task<T> GetByIdAsync(Guid id)

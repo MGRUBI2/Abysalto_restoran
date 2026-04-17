@@ -1,4 +1,5 @@
-﻿using AbySalto.Junior.Application.Dto;
+﻿using System.Diagnostics;
+using AbySalto.Junior.Application.Dto;
 using AbySalto.Junior.Application.Exception;
 using AbySalto.Junior.Application.Interfaces;
 using AbySalto.Junior.Domain.Entities;
@@ -11,12 +12,14 @@ public class OrderService : IOrderService
     
     private readonly IOrderRepository _orderRepository;
     private readonly IArticleRepository _articleRepository;
-    private readonly IMapper<Order, BackendOrderCreationRequestDto> _mapper;
+    private readonly IMapper<Order, OrderResponseDto> _orderResponseDtoMapper;
+    private readonly IMapper<Article, ArticleResponseDto> _articelMapper;
 
-    public OrderService(IOrderRepository orderRepository, IMapper<Order, BackendOrderCreationRequestDto> mapper,IArticleRepository articleRepository)
+    public OrderService(IOrderRepository orderRepository, IMapper<Order,OrderResponseDto> mapper,IArticleRepository articleRepository, IMapper<Article, ArticleResponseDto> articleMapper)
     {
         _orderRepository = orderRepository;
-        _mapper = mapper;
+        _orderResponseDtoMapper = mapper;
+        _articelMapper= articleMapper;
         _articleRepository = articleRepository;
     }
     
@@ -24,18 +27,23 @@ public class OrderService : IOrderService
     {
         List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
 
-        var newDto = new BackendOrderCreationRequestDto(
-            dto.GuestName,
-            dto.Payment,
-            dto.Address,
-            dto.PhoneNumber,
-            dto.Notes,
-            articles
-        );
-        
-        var order = _mapper.ToEntity(newDto);
+        var order = new Order
+        {
+            Name = dto.GuestName,
+            Payment = dto.Payment,
+            Address = dto.Address,
+            PhoneNumber = dto.PhoneNumber,
+            Notes = dto.Notes,
+            Articles = articles
+        };
 
         await _orderRepository.AddAsync(order);
     }
 
+    public async Task<IEnumerable<OrderResponseDto>> GetAllOrders()
+    {
+        var orders= await _orderRepository.GetAllAsync();
+        
+        return orders.Select(o => _orderResponseDtoMapper.ToDto(o)).ToList();
+    }
 }
