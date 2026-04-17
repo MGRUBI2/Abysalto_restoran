@@ -1,4 +1,5 @@
-﻿using AbySalto.Junior.Domain.Entities;
+﻿using AbySalto.Junior.Application.Dto;
+using AbySalto.Junior.Domain.Entities;
 using AbySalto.Junior.Domain.Interfaces;
 using AbySalto.Junior.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -24,5 +25,12 @@ public class OrderRepository : Repository<Order>, IOrderRepository
     public async Task<Order?> GetOrderByNameAsync(string name)
     {
         return await _dbSet.FindAsync(name);
+    }
+
+    public async Task UpdateOrderStatusAsync(OrderStatusUpdateRequestDto dto)
+    {
+        await _dbSet.Where(o => o.Id == dto.id)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(o => o.Status,dto.status));
     }
 }

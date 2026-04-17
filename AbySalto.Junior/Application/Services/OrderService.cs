@@ -40,6 +40,11 @@ public class OrderService : IOrderService
         await _orderRepository.AddAsync(order);
     }
 
+    public async Task UpdateOrder(OrderStatusUpdateRequestDto dto)
+    {
+        await _orderRepository.UpdateOrderStatusAsync(dto);
+    }
+
     public async Task<IEnumerable<OrderResponseDto>> GetAllOrders()
     {
         var orders= await _orderRepository.GetAllAsync();
