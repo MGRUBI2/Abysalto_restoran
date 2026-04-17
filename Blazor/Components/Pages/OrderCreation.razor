@@ -13,11 +13,11 @@
 
                     <h3 class="text-primary text-center mb-4">Add Order</h3>
 
-                    <EditForm Model="order" OnValidSubmit="HandleSubmit">
+                    <EditForm Model="order" OnSubmit="HandleSubmit">
 
                         <div class="mb-3">
                             <label class="form-label">Guest Name</label>
-                            <InputText class="form-control" @bind-Value="order.GuestName" />
+                            <InputText class="form-control" @bind-Value="order.GuestName"/>
                         </div>
 
                         <div class="mb-3">
@@ -32,20 +32,20 @@
 
                         <div class="mb-3">
                             <label class="form-label">Address</label>
-                            <InputText class="form-control" @bind-Value="order.Address" />
+                            <InputText class="form-control" @bind-Value="order.Address"/>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
-                            <InputText class="form-control" @bind-Value="order.PhoneNumber" />
+                            <InputText class="form-control" @bind-Value="order.PhoneNumber"/>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Notes</label>
-                            <InputTextArea class="form-control" @bind-Value="order.Notes" />
+                            <InputTextArea class="form-control" @bind-Value="order.Notes"/>
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <h5 class="text-primary mb-3">Add Articles</h5>
 
@@ -87,13 +87,17 @@
 
                     </EditForm>
                     
-                    @if (!string.IsNullOrWhiteSpace(message))
+                     @if (!string.IsNullOrWhiteSpace(message) && message.Length < 150) @*M.G: big messages are from asp.net and are not meant for user *@
                     {
                         <div class="alert alert-info">
-                            @message
+                            <span>@message</span>
                         </div>
                     }
 
+                    <div class="mt-4 d-grid gap-2">
+                        <a href="/" class="btn btn-outline-primary">Back to Orders</a>
+                    </div> 
+                    
                 </div>
             </div>
 
@@ -112,11 +116,11 @@
     {
         try
         {
-            articles = await Http.GetFromJsonAsync<List<ArticleResponseDto>>("http://localhost:5074/api/v1/article");
+            articles = await Http.GetFromJsonAsync<List<ArticleResponseDto>>("http://localhost:5074/api/v1/articles");
         }
         catch (Exception e)
         {
-            message ="greska s slanjem: "+ e.Message;
+            message ="Error with request: "+ e.Message;
         }
     }
     
@@ -126,7 +130,6 @@
     {
         if (selectedArticleId == Guid.Empty)
         {
-            message = "there is nothing selected";
             return;
         }
         
@@ -145,12 +148,27 @@
 
     private async Task HandleSubmit()
     {
-        var response = await Http.PostAsJsonAsync("http://localhost:5074/api/v1/order", order);
-
-        if (response.IsSuccessStatusCode)
+        try
         {
-            order = new();
+            var response = await Http.PostAsJsonAsync("http://localhost:5074/api/v1/orders", order);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                order = new();
+                message = "Spremljeno";
+            }
+            else
+            {
+                message ="Error with request: "+ await response.Content.ReadAsStringAsync();
+            }
+            
         }
+        catch (Exception e)
+        {
+            message ="Error with request: "+ e.Message;
+        }
+
+     
     }
 
     private string ArticleName(Guid id)//M.G: will optimize later

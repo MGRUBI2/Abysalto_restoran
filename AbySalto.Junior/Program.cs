@@ -4,6 +4,7 @@ using AbySalto.Junior.Application;
 using AbySalto.Junior.Infrastructure;
 using AbySalto.Junior.Infrastructure.Database;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -41,6 +42,14 @@ namespace AbySalto.Junior
             builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));//M.G: changed parts of code to fit for postgresql 
 
+            
+            builder.Services.AddControllers() //M.G: removing this allows me to send custom error messages to frontend
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressModelStateInvalidFilter = true;
+                });
+            
+            
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -57,20 +66,6 @@ namespace AbySalto.Junior
             app.UseHttpsRedirection();
             app.UseAuthorization();
             
-            
-            // app.UseExceptionHandler(errorApp => // M.G: not sure if this fixes logging
-            // {
-            //     errorApp.Run(async context =>
-            //     {
-            //         var error = context.Features.Get<IExceptionHandlerFeature>();
-            //         if (error != null)
-            //         {
-            //             Console.WriteLine($"ERROR: {error.Error.Message}");
-            //             Console.WriteLine($"STACK: {error.Error.StackTrace}");
-            //         }
-            //     });
-            // });
-
             
             app.UseCors("AllowFetch");
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AbySalto.Junior.Controllers;
 
 [ApiController]
-[Route("api/v1/article")]
+[Route("api/v1/articles")]
 public class ArticleController : ControllerBase
 {
     private IArticleService _articleService;

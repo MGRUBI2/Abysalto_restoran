@@ -44,6 +44,11 @@
                             <strong>Address:</strong>
                             <div class="text-muted">@order.Address</div>
                         </div>
+                        
+                        <div class="mb-3">
+                            <strong>Datum narudžbe:</strong>
+                            <div class="text-muted">@order.OrderDate.DateTime</div>
+                        </div>
 
                         <div class="mb-3">
                             <strong>Phone Number:</strong>
@@ -76,6 +81,7 @@
                             <span>@order.TotalAmount €</span>
                         </div>
 
+                        <b><hr></b>
                     </div>
                 }
                 <div class="mt-4 d-grid gap-2">
@@ -109,7 +115,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        orders =  await Http.GetFromJsonAsync<List<OrderDto>>("http://localhost:5074/api/v1/order");
+        orders =  await Http.GetFromJsonAsync<List<OrderDto>>("http://localhost:5074/api/v1/orders");
        orders= orders.OrderByDescending(o => o.TotalAmount).ToList();//M.G: tmp
     }
 
@@ -117,6 +123,6 @@
     {
         var order = orders.First(o =>o.Id == id);
 
-        await Http.PutAsJsonAsync($"http://localhost:5074/api/v1/order/{id}",order);
+        await Http.PutAsJsonAsync($"http://localhost:5074/api/v1/orders/{id}",order);
     }
 }
