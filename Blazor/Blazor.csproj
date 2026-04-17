@@ -10,4 +10,8 @@
       <Folder Include="Components\Layout\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AbySalto.Junior\AbySalto.Junior.csproj" />
+    </ItemGroup>
+
 </Project>

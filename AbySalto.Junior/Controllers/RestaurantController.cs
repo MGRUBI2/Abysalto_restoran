@@ -5,17 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace AbySalto.Junior.Controllers
 {
     [ApiController]
-    [Route("order")]
+    [Route("api/v1/order")]
     public class RestaurantController : ControllerBase
     {
-       private readonly IOrderService _orderService; 
+       private readonly IOrderService _orderService;
+
+       public RestaurantController(IOrderService orderService)
+       {
+           _orderService = orderService;
+       }
         
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] OrderCreationRequestDto dto)
         {
             try
             {
-                _orderService.CreateOrder(dto);
+                await _orderService.CreateOrder(dto);
 
                 return Ok();
             }

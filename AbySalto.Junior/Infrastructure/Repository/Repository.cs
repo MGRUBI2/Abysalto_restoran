@@ -20,10 +20,10 @@ public abstract class Repository<T> : IRepository<T> where T : class
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<T?>> GetAllAsync()
+    public async Task<IEnumerable<T>> GetAllAsync()
         => await _dbSet.ToListAsync();
 
-    public async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T> GetByIdAsync(Guid id)
         => await _dbSet.FindAsync(id);
    
     public async Task<T> AddAsync(T entity)

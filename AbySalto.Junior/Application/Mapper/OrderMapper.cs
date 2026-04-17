@@ -19,7 +19,8 @@ public class OrderMapper : IMapper<Order,OrderCreationRequestDto>
             Payment =  dto.Payment,
             Address = dto.Address,
             PhoneNumber = dto.PhoneNumber,
-            Notes = dto.Notes
+            Notes = dto.Notes,
+            Articles = dto.Articles,
         };
     }
 }

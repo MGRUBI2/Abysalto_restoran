@@ -22,14 +22,6 @@ public class OrderService : IOrderService
     {
         var order = _mapper.ToEntity(dto);
 
-        try
-        {
-            await _orderRepository.AddAsync(order);
-        }
-        catch (DbException e)
-        {
-            Console.WriteLine("Database error: "+ e.Message);
-            throw new DbException("Database error");
-        }
+        await _orderRepository.AddAsync(order);
     }
 }

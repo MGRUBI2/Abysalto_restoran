@@ -4,6 +4,6 @@ namespace AbySalto.Junior.Domain.Interfaces;
 
 public interface IArticleRepository : IRepository<Article>
 {
-    Task<Order?> GetOrderByIdAsync(Guid id); 
-    Task<Order?> GetOrderByNameAsync(string name); 
+    Task<Article> GetOrderByIdAsync(Guid id); 
+    Task<Article> GetOrderByNameAsync(string name); 
 }

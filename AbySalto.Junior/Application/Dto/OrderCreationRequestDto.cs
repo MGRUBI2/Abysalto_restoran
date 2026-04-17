@@ -1,4 +1,5 @@
-﻿using AbySalto.Junior.Domain.Enums;
+﻿using AbySalto.Junior.Domain.Entities;
+using AbySalto.Junior.Domain.Enums;
 
 namespace AbySalto.Junior.Application.Dto;
 
@@ -7,5 +8,6 @@ public record OrderCreationRequestDto(
     Payment Payment,
     string Address,
     string PhoneNumber,
-    string Notes
+    string Notes,
+    List<Article> Articles
     );
