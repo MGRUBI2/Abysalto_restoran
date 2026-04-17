@@ -9,4 +9,6 @@ public interface IOrderService
 
     Task<IEnumerable<OrderResponseDto>> GetAllOrders();
 
+    Task UpdateOrder(OrderStatusUpdateRequestDto dto);
+
 }

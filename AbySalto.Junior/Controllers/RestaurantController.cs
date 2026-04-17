@@ -45,5 +45,20 @@ namespace AbySalto.Junior.Controllers
                 return StatusCode(500, "Error with creation of order" + e.Message); 
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateByIdAsync([FromBody] OrderStatusUpdateRequestDto dto)
+        {
+            try
+            {
+                await _orderService.UpdateOrder(dto);
+
+                return Ok();
+            } 
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error with creation of order" + e.Message);
+            }
+        }
     }
 }

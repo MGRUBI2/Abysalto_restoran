@@ -23,12 +23,15 @@
                         
                         <EditForm Model="order" OnValidSubmit="() => UpdateStatus(order.Id)">
                             <strong>Status: </strong>
-                            <select class="form-select" @bind="NewStatus">
+                            <select class="form-select" @bind="order.Status">
                                 @foreach (var status in Enum.GetValues<Status>())
                                 {
                                     <option value="@status">@status</option>
                                 }
                             </select>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Spremi
+                            </button>
                         
                         </EditForm>
 
@@ -86,16 +89,34 @@
 </div>
 
 @code {
-    private  List<OrderResponseDto> orders = new();
-    private Status NewStatus { get; set; }
+    
+   private class OrderDto {
+       public Guid Id { get; set; }
+       public string GuestName{ get; set; }
+       public DateTimeOffset OrderDate{ get; set; }
+       public Status Status { get; set; }
+       public Payment Payment{ get; set; }
+       public string Address{ get; set; }
+       public string PhoneNumber{ get; set; }
+       public string Notes{ get; set; }
+       public decimal TotalAmount{ get; set; }
+       public List<ArticleResponseDto> Articles { get; set; }
+   }
+    
+    private  List<OrderDto> orders = new();
+    
+    
 
     protected async override Task OnInitializedAsync()
     {
-        orders = await Http.GetFromJsonAsync<List<OrderResponseDto>>("http://localhost:5074/api/v1/order");
+        orders =  await Http.GetFromJsonAsync<List<OrderDto>>("http://localhost:5074/api/v1/order");
+       orders= orders.OrderByDescending(o => o.TotalAmount).ToList();//M.G: tmp
     }
 
-    private async Task UpdateStatus()
+    private async Task UpdateStatus(Guid id)
     {
-        
+        var order = orders.First(o =>o.Id == id);
+
+        await Http.PutAsJsonAsync($"http://localhost:5074/api/v1/order/{id}",order);
     }
 }
