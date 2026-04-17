@@ -1,7 +1,9 @@
 
+using System.Text.Json.Serialization;
 using AbySalto.Junior.Application;
 using AbySalto.Junior.Infrastructure;
 using AbySalto.Junior.Infrastructure.Database;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -28,6 +30,7 @@ namespace AbySalto.Junior
                         .AllowAnyMethod();
                 });
             });
+            
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -53,6 +56,20 @@ namespace AbySalto.Junior
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+            
+            
+            // app.UseExceptionHandler(errorApp => // M.G: not sure if this fixes logging
+            // {
+            //     errorApp.Run(async context =>
+            //     {
+            //         var error = context.Features.Get<IExceptionHandlerFeature>();
+            //         if (error != null)
+            //         {
+            //             Console.WriteLine($"ERROR: {error.Error.Message}");
+            //             Console.WriteLine($"STACK: {error.Error.StackTrace}");
+            //         }
+            //     });
+            // });
 
             
             app.UseCors("AllowFetch");

@@ -10,8 +10,9 @@ public static class DependencyInjection
 {
    public static IServiceCollection AddApplication(this IServiceCollection services)
    {
-      services.AddSingleton <IMapper<Order, OrderCreationRequestDto>,OrderMapper>()
+      services.AddSingleton <IMapper<Order, BackendOrderCreationRequestDto>,OrderMapper>()
          .AddSingleton<IMapper<Article,ArticleResponseDto>,ArticleMapper>()
+         .AddSingleton<IMapper<Order,OrderResponseDto>,OrderResponseDtoMapper>()
          .AddScoped<IOrderService,OrderService>()
          .AddScoped<IArticleService,ArticleService>();
       

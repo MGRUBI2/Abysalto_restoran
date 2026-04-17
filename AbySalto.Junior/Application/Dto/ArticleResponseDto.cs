@@ -1,7 +1,7 @@
 ﻿namespace AbySalto.Junior.Application.Dto;
 
 public record ArticleResponseDto(
-    Guid id,
+    Guid Id,
     string Name,
     decimal Price,
     string Description

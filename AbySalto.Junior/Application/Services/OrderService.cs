@@ -1,4 +1,5 @@
-﻿using AbySalto.Junior.Application.Dto;
+﻿using System.Diagnostics;
+using AbySalto.Junior.Application.Dto;
 using AbySalto.Junior.Application.Exception;
 using AbySalto.Junior.Application.Interfaces;
 using AbySalto.Junior.Domain.Entities;
@@ -10,18 +11,39 @@ public class OrderService : IOrderService
 {
     
     private readonly IOrderRepository _orderRepository;
-    private readonly IMapper<Order, OrderCreationRequestDto> _mapper;
+    private readonly IArticleRepository _articleRepository;
+    private readonly IMapper<Order, OrderResponseDto> _orderResponseDtoMapper;
+    private readonly IMapper<Article, ArticleResponseDto> _articelMapper;
 
-    public OrderService(IOrderRepository orderRepository, IMapper<Order, OrderCreationRequestDto> mapper)
+    public OrderService(IOrderRepository orderRepository, IMapper<Order,OrderResponseDto> mapper,IArticleRepository articleRepository, IMapper<Article, ArticleResponseDto> articleMapper)
     {
         _orderRepository = orderRepository;
-        _mapper = mapper;
+        _orderResponseDtoMapper = mapper;
+        _articelMapper= articleMapper;
+        _articleRepository = articleRepository;
     }
     
-    public async Task CreateOrder(OrderCreationRequestDto dto)
+    public async Task CreateOrder(FrontendOrderCreationRequestDto dto)
     {
-        var order = _mapper.ToEntity(dto);
+        List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
+
+        var order = new Order
+        {
+            Name = dto.GuestName,
+            Payment = dto.Payment,
+            Address = dto.Address,
+            PhoneNumber = dto.PhoneNumber,
+            Notes = dto.Notes,
+            Articles = articles
+        };
 
         await _orderRepository.AddAsync(order);
+    }
+
+    public async Task<IEnumerable<OrderResponseDto>> GetAllOrders()
+    {
+        var orders= await _orderRepository.GetAllAsync();
+        
+        return orders.Select(o => _orderResponseDtoMapper.ToDto(o)).ToList();
     }
 }

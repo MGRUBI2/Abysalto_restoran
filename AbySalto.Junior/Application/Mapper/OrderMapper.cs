@@ -4,14 +4,14 @@ using AbySalto.Junior.Domain.Entities;
 
 namespace AbySalto.Junior.Application.Mapper;
 
-public class OrderMapper : IMapper<Order,OrderCreationRequestDto>
+public class OrderMapper : IMapper<Order,BackendOrderCreationRequestDto>
 {
-    public OrderCreationRequestDto ToDto(Order order)
+    public BackendOrderCreationRequestDto ToDto(Order order)
     {
         throw new NotImplementedException();
     }
 
-    public Order ToEntity(OrderCreationRequestDto dto)
+    public Order ToEntity(BackendOrderCreationRequestDto dto)
     {
         return new Order
         {
@@ -20,7 +20,12 @@ public class OrderMapper : IMapper<Order,OrderCreationRequestDto>
             Address = dto.Address,
             PhoneNumber = dto.PhoneNumber,
             Notes = dto.Notes,
-            Articles = dto.Articles,
+            Articles =dto.Articles.Select(a => new Article{
+                Id=a.Id,
+                Name = a.Name,
+                Description = a.Description,
+                Price = a.Price
+                }).ToList()
         };
     }
 }

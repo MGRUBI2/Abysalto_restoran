@@ -1,4 +1,5 @@
-﻿using AbySalto.Junior.Application.Dto;
+﻿using System.Data.Common;
+using AbySalto.Junior.Application.Dto;
 using AbySalto.Junior.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace AbySalto.Junior.Controllers
        }
         
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] OrderCreationRequestDto dto)
+        public async Task<IActionResult> PostAsync([FromBody] FrontendOrderCreationRequestDto dto)
         {
             try
             {
@@ -29,6 +30,20 @@ namespace AbySalto.Junior.Controllers
                return StatusCode(500, "Error with creation of order"); 
             }
             
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
+        {
+            try
+            {
+                
+                return Ok(await _orderService.GetAllOrders());
+            }
+            catch (DbException e)
+            {
+                return StatusCode(500, "Error with creation of order" + e.Message); 
+            }
         }
     }
 }

@@ -1,0 +1,101 @@
+﻿@page "/orders"
+@inject HttpClient Http
+@using AbySalto.Junior.Application.Dto
+@using AbySalto.Junior.Domain.Enums
+@rendermode InteractiveServer
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+                
+                @foreach (var order in orders)
+                {
+                    <div class="card-body p-4">
+
+                        <h3 class="text-primary text-center mb-4">Order Details</h3>
+
+                        <div class="mb-3">
+                            <strong>Guest Name:</strong>
+                            <div class="text-muted">@order.GuestName</div>
+                        </div>
+                        
+                        <EditForm Model="order" OnValidSubmit="() => UpdateStatus(order.Id)">
+                            <strong>Status: </strong>
+                            <select class="form-select" @bind="NewStatus">
+                                @foreach (var status in Enum.GetValues<Status>())
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </select>
+                        
+                        </EditForm>
+
+                        <div class="mb-3">
+                            <strong>Payment Method:</strong>
+                            <div class="text-muted">@order.Payment</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Address:</strong>
+                            <div class="text-muted">@order.Address</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Phone Number:</strong>
+                            <div class="text-muted">@order.PhoneNumber</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Notes:</strong>
+                            <div class="text-muted">@order.Notes</div>
+                        </div>
+
+                        <hr>
+
+                        <h5 class="text-primary mb-3">Ordered Items</h5>
+
+                        <ul class="list-group mb-3">
+                            @foreach (var article in order.Articles)
+                            {
+                                <li class="list-group-item d-flex justify-content-between">
+                                    @article.Name   
+                                    <span></span>
+                                </li>
+                            }
+                        </ul>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total:</span>
+                            <span>@order.TotalAmount €</span>
+                        </div>
+
+                    </div>
+                }
+                <div class="mt-4 d-grid gap-2">
+                        <a href="/" class="btn btn-outline-primary">Back to Orders</a>
+                    </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private  List<OrderResponseDto> orders = new();
+    private Status NewStatus { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        orders = await Http.GetFromJsonAsync<List<OrderResponseDto>>("http://localhost:5074/api/v1/order");
+    }
+
+    private async Task UpdateStatus()
+    {
+        
+    }
+}
