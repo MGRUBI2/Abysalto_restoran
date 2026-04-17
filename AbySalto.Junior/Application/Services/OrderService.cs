@@ -10,18 +10,32 @@ public class OrderService : IOrderService
 {
     
     private readonly IOrderRepository _orderRepository;
-    private readonly IMapper<Order, OrderCreationRequestDto> _mapper;
+    private readonly IArticleRepository _articleRepository;
+    private readonly IMapper<Order, BackendOrderCreationRequestDto> _mapper;
 
-    public OrderService(IOrderRepository orderRepository, IMapper<Order, OrderCreationRequestDto> mapper)
+    public OrderService(IOrderRepository orderRepository, IMapper<Order, BackendOrderCreationRequestDto> mapper,IArticleRepository articleRepository)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
+        _articleRepository = articleRepository;
     }
     
-    public async Task CreateOrder(OrderCreationRequestDto dto)
+    public async Task CreateOrder(FrontendOrderCreationRequestDto dto)
     {
-        var order = _mapper.ToEntity(dto);
+        List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
+
+        var newDto = new BackendOrderCreationRequestDto(
+            dto.GuestName,
+            dto.Payment,
+            dto.Address,
+            dto.PhoneNumber,
+            dto.Notes,
+            articles
+        );
+        
+        var order = _mapper.ToEntity(newDto);
 
         await _orderRepository.AddAsync(order);
     }
+
 }

@@ -16,7 +16,7 @@ namespace AbySalto.Junior.Controllers
        }
         
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] OrderCreationRequestDto dto)
+        public async Task<IActionResult> PostAsync([FromBody] FrontendOrderCreationRequestDto dto)
         {
             try
             {
