@@ -3,14 +3,35 @@
 @using System.Net
 @using AbySalto.Junior.Application.Dto
 @using AbySalto.Junior.Domain.Enums
+@using Blazor.Interfaces
+@using Blazor.Util.OrderSort
 @rendermode InteractiveServer
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
+            
+            
+            <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                    <select class="form-select" @onchange="e => {selectedSortType=e.Value.ToString(); ChangeSortType(); }">
+                        @foreach (var type in sortType)
+                        {
+                            <option value="@type.Key">@type.Key</option>
+                        }
+                    </select>
+                </div>
+
+                @* <div class="col-md-3 d-grid"> *@
+                @*     <button type="submit" class="btn btn-outline-primary" @onclick="ChangeSortType"> *@
+                @*         promjeni *@
+                @*     </button> *@
+                @* </div> *@
+            </div>
+
 
             <div class="card shadow-sm border-0">
-                
+
                 @foreach (var order in orders)
                 {
                     <div class="card-body p-4">
@@ -21,7 +42,7 @@
                             <strong>Guest Name:</strong>
                             <div class="text-muted">@order.GuestName</div>
                         </div>
-                        
+
                         <EditForm Model="order" OnValidSubmit="() => UpdateStatus(order.Id)">
                             <strong>Status: </strong>
                             <select class="form-select" @bind="order.Status">
@@ -33,7 +54,7 @@
                             <button type="submit" class="btn btn-primary w-100">
                                 Spremi
                             </button>
-                        
+
                         </EditForm>
 
                         <div class="mb-3">
@@ -45,7 +66,7 @@
                             <strong>Address:</strong>
                             <div class="text-muted">@order.Address</div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <strong>Datum narudžbe:</strong>
                             <div class="text-muted">@order.OrderDate.DateTime</div>
@@ -69,7 +90,7 @@
                             @foreach (var article in order.Articles)
                             {
                                 <li class="list-group-item d-flex justify-content-between">
-                                    @article.Name 
+                                    @article.Name
                                     <span></span>
                                     @article.Quantity x
                                 </li>
@@ -85,18 +106,18 @@
 
                         <b><hr></b>
                     </div>
-                    
+
                     @if (!string.IsNullOrWhiteSpace(message) && message.Length < 150) @*M.G: big messages are from asp.net and are not meant for user *@
                     {
                         <div class="alert alert-info">
                             <span>@message</span>
                         </div>
                     }
-                    
+
                 }
                 <div class="mt-4 d-grid gap-2">
-                        <a href="/" class="btn btn-outline-primary">Back to Orders</a>
-                    </div>
+                    <a href="/" class="btn btn-outline-primary">Back to Orders</a>
+                </div>
 
             </div>
 
@@ -107,8 +128,23 @@
 @code {
 
     string message = "";
+    private ISort<OrderMuttableDto> orderSort ;
+    private string selectedSortType="SortByPriceDescending";
+
+    private Dictionary<string, ISort<OrderMuttableDto>> sortType = new()
+    {
+        { "SortByPriceAscending", new SortByPriceAscending() },
+        { "SortByPriceDescending", new SortByPriceDescending() }
+    };
+
+
+    private void ChangeSortType()
+    {
+        orderSort = sortType[selectedSortType];
+        orders=orderSort.Sort(orders).ToList();
+    }
     
-   private class OrderDto {
+   public class OrderMuttableDto {
        public Guid Id { get; set; }
        public string GuestName{ get; set; }
        public DateTimeOffset OrderDate{ get; set; }
@@ -121,14 +157,16 @@
        public List<ArticleDto> Articles { get; set; }
    }
     
-    private  List<OrderDto> orders = new();
+    private  List<OrderMuttableDto> orders = new();
     
     
 
     protected async override Task OnInitializedAsync()
     {
-        orders =  await Http.GetFromJsonAsync<List<OrderDto>>("http://localhost:5074/api/v1/orders");
-       orders= orders.OrderByDescending(o => o.TotalAmount).ToList();//M.G: tmp
+        orders =  await Http.GetFromJsonAsync<List<OrderMuttableDto>>("http://localhost:5074/api/v1/orders");
+       // orders= orders.OrderByDescending(o => o.TotalAmount).ToList();//M.G: tmp
+       
+       // orders=orderSort.Sort(orders).ToList();
     }
 
     private async Task UpdateStatus(Guid id)

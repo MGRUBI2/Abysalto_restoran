@@ -23,7 +23,7 @@ public class OrderService : IOrderService
         _articleRepository = articleRepository;
     }
     
-    public async Task CreateOrder(FrontendOrderCreationRequestDto dto)
+    public async Task CreateOrder(OrderCreationRequestDto dto)
     {
         //M.G: depricated, will remove
         // List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();

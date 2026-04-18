@@ -4,7 +4,7 @@ namespace AbySalto.Junior.Application.Util;
 
 public static class OrderValidator
 {
-   public static void Validate(FrontendOrderCreationRequestDto order)
+   public static void Validate(OrderCreationRequestDto order)
    {
        string errorMessage=null; 
        
