@@ -10,7 +10,7 @@ public record OrderFrontendDto(
     PaymentFrontend PaymentFrontend,
     string Address,
     string PhoneNumber,
-    string Notes,
+    string? Notes,
     decimal TotalAmount,
     List<ArticleFrontendDto> Articles
     );

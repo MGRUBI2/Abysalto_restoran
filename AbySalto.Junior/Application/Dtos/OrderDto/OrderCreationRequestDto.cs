@@ -8,5 +8,5 @@ public record OrderCreationRequestDto(
     Payment Payment,
     string Address,
     string PhoneNumber,
-    string Notes,
+    string? Notes,
     List<OrderArticleRequestDto> Articles);

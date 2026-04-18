@@ -82,7 +82,9 @@
                                 </li>
                             }
                         </ul>
-
+                            
+                        <h5 class="text-primary mb-3">@totalPrice €</h5>
+                        
                         <button type="submit" class="btn btn-primary w-100">
                            Spremi 
                         </button>
@@ -109,7 +111,7 @@
 
 @code {
     private OrderCreationDto order = new();
-
+    private decimal totalPrice = 0;
     private List<ArticleDto> articles = new();
     private Guid selectedArticleId;
     private string message = "";
@@ -149,6 +151,7 @@
             order.Articles.Add(article);
         }
 
+        totalPrice += article.Price;
         selectedArticleId = Guid.Empty;
     }
 
@@ -165,6 +168,7 @@
             art.Quantity--; //M.G: refrence!!!
         }
         
+        totalPrice -=article.Price;
     }
 
     private async Task HandleSubmit()
@@ -180,6 +184,8 @@
             {
                 order = new();
                 message = "Spremljeno";
+
+                totalPrice = 0;
             }
             else
             {
@@ -201,7 +207,7 @@
         public int Payment { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
         public List<ArticleDto> Articles{ get; set; } = new();
     }
 
@@ -216,6 +222,12 @@
 
     public OrderFrontendDto mapper()
     {
+
+        if (string.IsNullOrEmpty(order.Notes)) //M.G: last second fix!!
+        {
+            order.Notes = "   ";
+        }
+            
         return  new OrderFrontendDto(
             null,
             order.GuestName,
