@@ -49,7 +49,7 @@ namespace AbySalto.Junior.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateByIdAsync([FromRoute] OrderStatusUpdateRequestDto dto)
+        public async Task<IActionResult> UpdateByIdAsync([FromBody] OrderStatusUpdateRequestDto dto)
         {
             try
             {
