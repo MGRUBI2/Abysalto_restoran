@@ -5,9 +5,9 @@ namespace AbySalto.Junior.Application.Interfaces;
 
 public interface IOrderService
 {
-    Task CreateOrder(FrontendOrderCreationRequestDto Dto);
+    Task CreateOrder(OrderCreationRequestDto Dto);
 
-    Task<IEnumerable<OrderResponseDto>> GetAllOrders();
+    Task<IEnumerable<OrderDto>> GetAllOrders();
 
     Task UpdateOrder(OrderStatusUpdateRequestDto dto);
 

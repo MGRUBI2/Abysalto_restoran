@@ -12,10 +12,10 @@ public class OrderService : IOrderService
     
     private readonly IOrderRepository _orderRepository;
     private readonly IArticleRepository _articleRepository;
-    private readonly IMapper<Order, OrderResponseDto> _orderResponseDtoMapper;
-    private readonly IMapper<Article, ArticleResponseDto> _articelMapper;
+    private readonly IMapper<Order, OrderDto> _orderResponseDtoMapper;
+    private readonly IMapper<Article, ArticleDto> _articelMapper;
 
-    public OrderService(IOrderRepository orderRepository, IMapper<Order,OrderResponseDto> mapper,IArticleRepository articleRepository, IMapper<Article, ArticleResponseDto> articleMapper)
+    public OrderService(IOrderRepository orderRepository, IMapper<Order,OrderDto> mapper,IArticleRepository articleRepository, IMapper<Article, ArticleDto> articleMapper)
     {
         _orderRepository = orderRepository;
         _orderResponseDtoMapper = mapper;
@@ -23,9 +23,10 @@ public class OrderService : IOrderService
         _articleRepository = articleRepository;
     }
     
-    public async Task CreateOrder(FrontendOrderCreationRequestDto dto)
+    public async Task CreateOrder(OrderCreationRequestDto dto)
     {
-        List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
+        //M.G: depricated, will remove
+        // List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
 
         var order = new Order
         {
@@ -34,7 +35,10 @@ public class OrderService : IOrderService
             Address = dto.Address,
             PhoneNumber = dto.PhoneNumber,
             Notes = dto.Notes,
-            Articles = articles
+            Articles = dto.Articles.Select(a => new OrderArticle{
+                ArticleId=a.Id,
+               Quantity=a.Quantity 
+                }).ToList()
         };
 
         await _orderRepository.AddAsync(order);
@@ -45,7 +49,7 @@ public class OrderService : IOrderService
         await _orderRepository.UpdateOrderStatusAsync(dto);
     }
 
-    public async Task<IEnumerable<OrderResponseDto>> GetAllOrders()
+    public async Task<IEnumerable<OrderDto>> GetAllOrders()
     {
         var orders= await _orderRepository.GetAllAsync();
         

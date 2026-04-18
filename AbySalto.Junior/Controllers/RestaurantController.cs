@@ -1,12 +1,13 @@
 ﻿using System.Data.Common;
 using AbySalto.Junior.Application.Dto;
 using AbySalto.Junior.Application.Interfaces;
+using AbySalto.Junior.Application.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AbySalto.Junior.Controllers
 {
     [ApiController]
-    [Route("api/v1/order")]
+    [Route("api/v1/orders")]
     public class RestaurantController : ControllerBase
     {
        private readonly IOrderService _orderService;
@@ -17,17 +18,19 @@ namespace AbySalto.Junior.Controllers
        }
         
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] FrontendOrderCreationRequestDto dto)
+        public async Task<IActionResult> PostAsync([FromBody] OrderCreationRequestDto dto)
         {
             try
             {
+               OrderValidator.Validate(dto); 
+                
                 await _orderService.CreateOrder(dto);
 
                 return Ok();
             }
-            catch 
+            catch (ArgumentException e)
             {
-               return StatusCode(500, "Error with creation of order"); 
+                return BadRequest(e.Message);
             }
             
         }
@@ -37,7 +40,6 @@ namespace AbySalto.Junior.Controllers
         {
             try
             {
-                
                 return Ok(await _orderService.GetAllOrders());
             }
             catch (DbException e)
@@ -55,9 +57,9 @@ namespace AbySalto.Junior.Controllers
 
                 return Ok();
             } 
-            catch (Exception e)
+            catch
             {
-                return StatusCode(500, "Error with creation of order" + e.Message);
+                return BadRequest("Error with update of order");
             }
         }
     }

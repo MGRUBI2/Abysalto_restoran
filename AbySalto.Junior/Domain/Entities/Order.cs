@@ -18,5 +18,5 @@ public class Order
    public string Notes { get; set; }= string.Empty; 
    
   
-   public ICollection<Article> Articles { get; set; } = new List<Article>();
+   public ICollection<OrderArticle> Articles { get; set; } = new List<OrderArticle>();
 }

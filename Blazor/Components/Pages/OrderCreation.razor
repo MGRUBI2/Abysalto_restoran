@@ -1,6 +1,6 @@
 ﻿@page "/createOrder"
-@using System.Data.Common
 @using AbySalto.Junior.Application.Dto
+@using AbySalto.Junior.Domain.Enums
 @rendermode InteractiveServer
 @inject HttpClient Http
 
@@ -13,11 +13,11 @@
 
                     <h3 class="text-primary text-center mb-4">Add Order</h3>
 
-                    <EditForm Model="order" OnValidSubmit="HandleSubmit">
+                    <EditForm Model="order" OnSubmit="HandleSubmit">
 
                         <div class="mb-3">
                             <label class="form-label">Guest Name</label>
-                            <InputText class="form-control" @bind-Value="order.GuestName" />
+                            <InputText class="form-control" @bind-Value="order.GuestName"/>
                         </div>
 
                         <div class="mb-3">
@@ -32,20 +32,20 @@
 
                         <div class="mb-3">
                             <label class="form-label">Address</label>
-                            <InputText class="form-control" @bind-Value="order.Address" />
+                            <InputText class="form-control" @bind-Value="order.Address"/>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
-                            <InputText class="form-control" @bind-Value="order.PhoneNumber" />
+                            <InputText class="form-control" @bind-Value="order.PhoneNumber"/>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Notes</label>
-                            <InputTextArea class="form-control" @bind-Value="order.Notes" />
+                            <InputTextArea class="form-control" @bind-Value="order.Notes"/>
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <h5 class="text-primary mb-3">Add Articles</h5>
 
@@ -69,12 +69,13 @@
                         </div>
 
                         <ul class="list-group mb-3">
-                            @foreach (var articleId in order.Articles)
+                            @foreach (var article in order.Articles)
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span>@ArticleName(articleId) </span>
+                                    <span>@article.Name </span>
+                                    <span>@article.Quantity x</span>
                                     <button type="button" class="btn btn-sm btn-danger"
-                                            @onclick="() => RemoveItem(articleId)">
+                                            @onclick="() => RemoveItem(article)">
                                         x
                                     </button>
                                 </li>
@@ -87,13 +88,17 @@
 
                     </EditForm>
                     
-                    @if (!string.IsNullOrWhiteSpace(message))
+                     @if (!string.IsNullOrWhiteSpace(message) && message.Length < 150) @*M.G: big messages are from asp.net and are not meant for user *@
                     {
                         <div class="alert alert-info">
-                            @message
+                            <span>@message</span>
                         </div>
                     }
 
+                    <div class="mt-4 d-grid gap-2">
+                        <a href="/" class="btn btn-outline-primary">Back to Orders</a>
+                    </div> 
+                    
                 </div>
             </div>
 
@@ -104,7 +109,7 @@
 @code {
     private OrderCreationDto order = new();
 
-    private List<ArticleResponseDto> articles = new();
+    private List<ArticleDto> articles = new();
     private Guid selectedArticleId;
     private string message = "";
 
@@ -112,11 +117,11 @@
     {
         try
         {
-            articles = await Http.GetFromJsonAsync<List<ArticleResponseDto>>("http://localhost:5074/api/v1/article");
+            articles = await Http.GetFromJsonAsync<List<ArticleDto>>("http://localhost:5074/api/v1/articles");
         }
         catch (Exception e)
         {
-            message ="greska s slanjem: "+ e.Message;
+            message ="Error with request: "+ e.Message;
         }
     }
     
@@ -126,37 +131,67 @@
     {
         if (selectedArticleId == Guid.Empty)
         {
-            message = "there is nothing selected";
             return;
         }
         
         var article = articles.FirstOrDefault(a => a.Id == selectedArticleId);
         if (article == null) return;
 
-        order.Articles.Add(article.Id);
+        if (order.Articles.Contains(article))
+        {
+            var art=order.Articles.FirstOrDefault(a => a.Equals(article));
+
+            art.Quantity++; //M.G: art is a reference !!!
+        }
+        else
+        {
+            order.Articles.Add(article);
+        }
 
         selectedArticleId = Guid.Empty;
     }
 
-    private void RemoveItem(Guid articleId)
+    private void RemoveItem(ArticleDto article)
     {
-        order.Articles.Remove(articleId);
+        var art = order.Articles.FirstOrDefault(article);
+
+        if (art.Quantity == 1)
+        {
+            order.Articles.Remove(article);
+        }
+        else
+        {
+            art.Quantity--; //M.G: refrence!!!
+        }
+        
     }
 
     private async Task HandleSubmit()
     {
-        var response = await Http.PostAsJsonAsync("http://localhost:5074/api/v1/order", order);
 
-        if (response.IsSuccessStatusCode)
+        var newOrderDto = mapper();
+        
+        try
         {
-            order = new();
+            var response = await Http.PostAsJsonAsync("http://localhost:5074/api/v1/orders", newOrderDto);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                order = new();
+                message = "Spremljeno";
+            }
+            else
+            {
+                message ="Error with request: "+ await response.Content.ReadAsStringAsync();
+            }
+            
         }
-    }
+        catch 
+        {
+            message ="Error: try again latter";
+        }
 
-    private string ArticleName(Guid id)//M.G: will optimize later
-    {
-        return articles.Where(a => a.Id == id)
-            .Select(a => a.Name).FirstOrDefault();
+     
     }
 
     public class OrderCreationDto
@@ -166,7 +201,33 @@
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Notes { get; set; }
-        public List<Guid> Articles{ get; set; } = new();
+        public List<ArticleDto> Articles{ get; set; } = new();
+    }
+
+    public class ArticleDto
+    {
+        public Guid Id { get; set; }
+        public string Name{ get; set; }
+        public decimal Price{ get; set; }
+        public string Description{ get; set; }
+        public int Quantity{ get; set; }
+    }
+
+    public OrderDto mapper()
+    {
+        return  new OrderDto(
+            null,
+            order.GuestName,
+            null,
+            null,
+            (Payment)order.Payment,
+            order.Address,
+            order.PhoneNumber,
+            order.Notes,
+            0,
+            order.Articles.Select(a => new AbySalto.Junior.Application.Dto.ArticleDto(a.Id,a.Name,a.Price,a.Description,a.Quantity)).ToList()
+                
+        );
     }
 
 }

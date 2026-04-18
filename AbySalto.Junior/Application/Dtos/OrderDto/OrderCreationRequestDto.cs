@@ -3,11 +3,10 @@ using AbySalto.Junior.Domain.Enums;
 
 namespace AbySalto.Junior.Application.Dto;
 
-public record BackendOrderCreationRequestDto(
+public record OrderCreationRequestDto(
     string GuestName,
     Payment Payment,
     string Address,
     string PhoneNumber,
     string Notes,
-    List<ArticleResponseDto> Articles
-    );
+    List<OrderArticleRequestDto> Articles);

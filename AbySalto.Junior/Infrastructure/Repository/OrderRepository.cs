@@ -13,12 +13,17 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
     public async Task<Order?> GetOrderByIdAsync(Guid id)
     {
-       return await _dbSet.FindAsync(id);
+       return await _dbSet
+           .Include(o=>o.Articles)
+           .ThenInclude(oa=>oa.Article)
+           .FirstOrDefaultAsync(o=>o.Id == id);
     }
 
     public override async Task<IEnumerable<Order>> GetAllAsync()
-    {//M.G: i had to override this so list in entity (or table many to many) is filled
-        return await _dbSet.Include(o=>o.Articles).ToListAsync();
+    {
+        return await _dbSet.Include(o=>o.Articles)
+            .ThenInclude(oa => oa.Article)
+            .ToListAsync();
     }
         
 

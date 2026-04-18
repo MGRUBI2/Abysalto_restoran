@@ -4,28 +4,29 @@ using AbySalto.Junior.Domain.Entities;
 
 namespace AbySalto.Junior.Application.Mapper;
 
-public class OrderMapper : IMapper<Order,BackendOrderCreationRequestDto>
-{
-    public BackendOrderCreationRequestDto ToDto(Order order)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Order ToEntity(BackendOrderCreationRequestDto dto)
-    {
-        return new Order
-        {
-            Name = dto.GuestName,
-            Payment =  dto.Payment,
-            Address = dto.Address,
-            PhoneNumber = dto.PhoneNumber,
-            Notes = dto.Notes,
-            Articles =dto.Articles.Select(a => new Article{
-                Id=a.Id,
-                Name = a.Name,
-                Description = a.Description,
-                Price = a.Price
-                }).ToList()
-        };
-    }
-}
+//
+// public class OrderMapper : IMapper<Order,BackendOrderCreationRequestDto>
+// {
+//     public BackendOrderCreationRequestDto ToDto(Order order)
+//     {
+//         throw new NotImplementedException();
+//     }
+//
+//     public Order ToEntity(BackendOrderCreationRequestDto dto)
+//     {
+//         return new Order
+//         {
+//             Name = dto.GuestName,
+//             Payment =  dto.Payment,
+//             Address = dto.Address,
+//             PhoneNumber = dto.PhoneNumber,
+//             Notes = dto.Notes,
+//             Articles =dto.Articles.Select(a => new Article{
+//                 Id=a.Id,
+//                 Name = a.Name,
+//                 Description = a.Description,
+//                 Price = a.Price
+//                 }).ToList()
+//         };
+//     }
+// }
