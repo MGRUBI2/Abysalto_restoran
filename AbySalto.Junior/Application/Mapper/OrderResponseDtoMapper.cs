@@ -5,15 +5,15 @@ using AbySalto.Junior.Domain.Entities;
 
 namespace AbySalto.Junior.Application.Mapper;
 
-public class OrderResponseDtoMapper : IMapper<Order,OrderDto>
+public class OrderResponseDtoMapper : IMapper<Order,OrderDtoBackend>
 {
-    public OrderDto ToDto(Order  order)
+    public OrderDtoBackend ToDto(Order  order)
     {
         decimal totalAmount = order.Articles.Sum(a => a.Article.Price * a.Quantity);
 
         var articlesDto = order.Articles.Select(a =>
         {
-            return new ArticleDto(
+            return new ArticleDtoBackend(
                 a.Article.Id,
                 a.Article.Name,
                 a.Article.Price,
@@ -22,13 +22,13 @@ public class OrderResponseDtoMapper : IMapper<Order,OrderDto>
             );
         }).ToList();
         
-        return new OrderDto
+        return new OrderDtoBackend
         (
              order.Id,
              order.Name,
              order.OrderTime,
              order.Status,
-              order.Payment,
+              order.PaymentBackend,
              order.Address,
              order.PhoneNumber,
              order.Notes,
@@ -37,7 +37,7 @@ public class OrderResponseDtoMapper : IMapper<Order,OrderDto>
         );
     }
 
-    public Order ToEntity(OrderDto destination)
+    public Order ToEntity(OrderDtoBackend destination)
     {
         throw new NotImplementedException();
     }

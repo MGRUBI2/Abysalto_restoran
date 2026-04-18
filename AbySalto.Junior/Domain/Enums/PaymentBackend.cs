@@ -1,6 +1,6 @@
 ﻿namespace AbySalto.Junior.Domain.Enums;
 
-public enum Payment
+public enum PaymentBackend
 {
     Cash,
     Debit,

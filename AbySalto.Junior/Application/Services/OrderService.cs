@@ -12,10 +12,10 @@ public class OrderService : IOrderService
     
     private readonly IOrderRepository _orderRepository;
     private readonly IArticleRepository _articleRepository;
-    private readonly IMapper<Order, OrderDto> _orderResponseDtoMapper;
-    private readonly IMapper<Article, ArticleDto> _articelMapper;
+    private readonly IMapper<Order, OrderDtoBackend> _orderResponseDtoMapper;
+    private readonly IMapper<Article, ArticleDtoBackend> _articelMapper;
 
-    public OrderService(IOrderRepository orderRepository, IMapper<Order,OrderDto> mapper,IArticleRepository articleRepository, IMapper<Article, ArticleDto> articleMapper)
+    public OrderService(IOrderRepository orderRepository, IMapper<Order,OrderDtoBackend> mapper,IArticleRepository articleRepository, IMapper<Article, ArticleDtoBackend> articleMapper)
     {
         _orderRepository = orderRepository;
         _orderResponseDtoMapper = mapper;
@@ -25,13 +25,11 @@ public class OrderService : IOrderService
     
     public async Task CreateOrder(OrderCreationRequestDto dto)
     {
-        //M.G: depricated, will remove
-        // List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
 
         var order = new Order
         {
             Name = dto.GuestName,
-            Payment = dto.Payment,
+            PaymentBackend = dto.PaymentBackend,
             Address = dto.Address,
             PhoneNumber = dto.PhoneNumber,
             Notes = dto.Notes,
@@ -49,7 +47,7 @@ public class OrderService : IOrderService
         await _orderRepository.UpdateOrderStatusAsync(dto);
     }
 
-    public async Task<IEnumerable<OrderDto>> GetAllOrders()
+    public async Task<IEnumerable<OrderDtoBackend>> GetAllOrders()
     {
         var orders= await _orderRepository.GetAllAsync();
         

@@ -11,48 +11,48 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
 
-                    <h3 class="text-primary text-center mb-4">Add Order</h3>
+                    <h3 class="text-primary text-center mb-4">Dodaj Narudžbu</h3>
 
                     <EditForm Model="order" OnSubmit="HandleSubmit">
 
                         <div class="mb-3">
-                            <label class="form-label">Guest Name</label>
+                            <label class="form-label">Ime kupca</label>
                             <InputText class="form-control" @bind-Value="order.GuestName"/>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Payment Method</label>
+                            <label class="form-label">Način plačanja</label>
                             <InputSelect class="form-select" @bind-Value="order.Payment">
-                                <option value="0">Cash</option>
-                                <option value="1">Debit</option>
-                                <option value="2">Credit</option>
-                                <option value="3">Mobile</option>
+                                <option value="0">Gotovina</option>
+                                <option value="1">Debitna kartica</option>
+                                <option value="2">Kartica</option>
+                                <option value="3">Mobilno plačanje</option>
                             </InputSelect>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Address</label>
+                            <label class="form-label">Adresa</label>
                             <InputText class="form-control" @bind-Value="order.Address"/>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Phone Number</label>
+                            <label class="form-label">Broj mobitela</label>
                             <InputText class="form-control" @bind-Value="order.PhoneNumber"/>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Notes</label>
+                            <label class="form-label">Napomena</label>
                             <InputTextArea class="form-control" @bind-Value="order.Notes"/>
                         </div>
 
                         <hr/>
 
-                        <h5 class="text-primary mb-3">Add Articles</h5>
+                        <h5 class="text-primary mb-3">Dodaj artikal</h5>
 
                         <div class="row g-2 mb-3">
                             <div class="col-md-6">
                                 <select class="form-select" @bind="selectedArticleId">
-                                    <option value="">Select article</option>
+                                    <option value="">Odaberi artikal</option>
 
                                     @foreach (var article in articles)
                                     {
@@ -63,7 +63,7 @@
 
                             <div class="col-md-3 d-grid">
                                 <button type="button" class="btn btn-outline-primary" @onclick="AddArticle">
-                                    Add
+                                   Dodaj 
                                 </button>
                             </div>
                         </div>
@@ -73,6 +73,7 @@
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span>@article.Name </span>
+                                    <span>cijena jednog proizvoda: @article.Price € </span>
                                     <span>@article.Quantity x</span>
                                     <button type="button" class="btn btn-sm btn-danger"
                                             @onclick="() => RemoveItem(article)">
@@ -83,7 +84,7 @@
                         </ul>
 
                         <button type="submit" class="btn btn-primary w-100">
-                            Save Order
+                           Spremi 
                         </button>
 
                     </EditForm>
@@ -96,7 +97,7 @@
                     }
 
                     <div class="mt-4 d-grid gap-2">
-                        <a href="/" class="btn btn-outline-primary">Back to Orders</a>
+                        <a href="/" class="btn btn-outline-primary">Nazad na izbornik</a>
                     </div> 
                     
                 </div>
@@ -182,13 +183,13 @@
             }
             else
             {
-                message ="Error with request: "+ await response.Content.ReadAsStringAsync();
+                message ="Greška: "+ await response.Content.ReadAsStringAsync();
             }
             
         }
         catch 
         {
-            message ="Error: try again latter";
+            message ="Greška: Provajte ponovo.";
         }
 
      

@@ -14,19 +14,16 @@
             
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
-                    <select class="form-select" @onchange="e => {selectedSortType=e.Value.ToString(); ChangeSortType(); }">
+                    <select class="form-select" @onchange="e => { selectedSortType = e.Value.ToString(); ChangeSortType(); }">
+                        
+                        <option value="">Sortiraj sadržaj</option>
+
                         @foreach (var type in sortType)
                         {
                             <option value="@type.Key">@type.Key</option>
                         }
                     </select>
                 </div>
-
-                @* <div class="col-md-3 d-grid"> *@
-                @*     <button type="submit" class="btn btn-outline-primary" @onclick="ChangeSortType"> *@
-                @*         promjeni *@
-                @*     </button> *@
-                @* </div> *@
             </div>
 
 
@@ -36,10 +33,10 @@
                 {
                     <div class="card-body p-4">
 
-                        <h3 class="text-primary text-center mb-4">Order Details</h3>
+                        <h3 class="text-primary text-center mb-4">Detalji Narudžbe</h3>
 
                         <div class="mb-3">
-                            <strong>Guest Name:</strong>
+                            <strong>Ime kupca:</strong>
                             <div class="text-muted">@order.GuestName</div>
                         </div>
 
@@ -58,12 +55,12 @@
                         </EditForm>
 
                         <div class="mb-3">
-                            <strong>Payment Method:</strong>
+                            <strong>Način plaćanja:</strong>
                             <div class="text-muted">@order.Payment</div>
                         </div>
 
                         <div class="mb-3">
-                            <strong>Address:</strong>
+                            <strong>Adresa:</strong>
                             <div class="text-muted">@order.Address</div>
                         </div>
 
@@ -73,25 +70,25 @@
                         </div>
 
                         <div class="mb-3">
-                            <strong>Phone Number:</strong>
+                            <strong>Broj mobitela:</strong>
                             <div class="text-muted">@order.PhoneNumber</div>
                         </div>
 
                         <div class="mb-3">
-                            <strong>Notes:</strong>
+                            <strong>Napomena:</strong>
                             <div class="text-muted">@order.Notes</div>
                         </div>
 
                         <hr>
 
-                        <h5 class="text-primary mb-3">Ordered Items</h5>
+                        <h5 class="text-primary mb-3">Naručeni artikli</h5>
 
                         <ul class="list-group mb-3">
                             @foreach (var article in order.Articles)
                             {
                                 <li class="list-group-item d-flex justify-content-between">
                                     @article.Name
-                                    <span></span>
+                                    <span> cijena jednog proizvoda: @article.Price €</span>
                                     @article.Quantity x
                                 </li>
                             }
@@ -100,7 +97,7 @@
                         <hr>
 
                         <div class="d-flex justify-content-between fw-bold">
-                            <span>Total:</span>
+                            <span>Ukupno:</span>
                             <span>@order.TotalAmount €</span>
                         </div>
 
@@ -116,7 +113,7 @@
 
                 }
                 <div class="mt-4 d-grid gap-2">
-                    <a href="/" class="btn btn-outline-primary">Back to Orders</a>
+                    <a href="/" class="btn btn-outline-primary">Nazad na izbornik</a>
                 </div>
 
             </div>
@@ -129,17 +126,21 @@
 
     string message = "";
     private ISort<OrderMuttableDto> orderSort ;
-    private string selectedSortType="SortByPriceDescending";
+    private string selectedSortType="Sortiraj po cijeni silazno";
 
     private Dictionary<string, ISort<OrderMuttableDto>> sortType = new()
     {
-        { "SortByPriceAscending", new SortByPriceAscending() },
-        { "SortByPriceDescending", new SortByPriceDescending() }
+        { "Sortiraj po cijeni uzlazno", new SortByPriceAscending() },
+        { "Sortiraj po cijeni silazno", new SortByPriceDescending() }
     };
 
 
     private void ChangeSortType()
     {
+        if (string.IsNullOrEmpty(selectedSortType)){
+            return;
+            }
+        
         orderSort = sortType[selectedSortType];
         orders=orderSort.Sort(orders).ToList();
     }
@@ -184,7 +185,7 @@
         }
         catch
         {
-            message = "Error: try again later";
+            message = "Greška: Provajte ponovo";
         }
     }
 }

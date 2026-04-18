@@ -44,7 +44,7 @@ namespace AbySalto.Junior.Controllers
             }
             catch (DbException e)
             {
-                return StatusCode(500, "Error with creation of order" + e.Message); 
+                return StatusCode(500, "Greška s kreiranjem narudžbe: " + e.Message); 
             }
         }
 
@@ -59,7 +59,7 @@ namespace AbySalto.Junior.Controllers
             } 
             catch
             {
-                return BadRequest("Error with update of order");
+                return BadRequest("Greška s ažuriranjem narudžbe");
             }
         }
     }
