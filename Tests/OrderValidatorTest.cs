@@ -14,7 +14,7 @@ public class OrderValidatorTest
   [TestCase(null,0,"ulica 123","123 12 45"," luk!")]
   [TestCase("ivica",0,"ulica 123",null," luk!")]
   [TestCase("ivna ",2,null,"123 12 45"," luk!")]
-  public async Task ShouldThrowException(string? name,PaymentBackend payment,string? address,string? number,string? notes)
+  public async Task ShouldThrowException(string? name,Payment payment,string? address,string? number,string? notes)
   {
     
    var order=new OrderCreationRequestDto(name,payment,address,number,notes,new List<OrderArticleRequestDto>{new OrderArticleRequestDto(Guid.NewGuid(),1)});
@@ -27,7 +27,7 @@ public class OrderValidatorTest
   [TestCase("ivica",0,"ulica 123","123 908 123"," luk!")]
   [TestCase("ivna ",2," put grada 54","123 12 45",null)]
   [TestCase("ivna ",1,"juzna cesta ","122 12 45","ajvar")]
-  public async Task ShouldNotThrowException(string? name, PaymentBackend payment, string? address, string? number,
+  public async Task ShouldNotThrowException(string? name, Payment payment, string? address, string? number,
       string? notes)
   {
       
