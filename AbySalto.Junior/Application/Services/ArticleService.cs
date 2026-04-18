@@ -9,15 +9,15 @@ namespace AbySalto.Junior.Application.Services;
 public class ArticleService : IArticleService
 {
     private readonly IArticleRepository _articleRepository;
-    private readonly IMapper<Article,ArticleDto> _mapper;
+    private readonly IMapper<Article,ArticleDtoBackend> _mapper;
     
-    public ArticleService(IArticleRepository articleRepository, IMapper<Article,ArticleDto> mapper)
+    public ArticleService(IArticleRepository articleRepository, IMapper<Article,ArticleDtoBackend> mapper)
     {
         _articleRepository = articleRepository;
         _mapper = mapper;
     }
     
-    public async Task<IEnumerable<ArticleDto>> GetAllArticles()
+    public async Task<IEnumerable<ArticleDtoBackend>> GetAllArticles()
     {
         var articles = await _articleRepository.GetAllAsync();
         

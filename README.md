@@ -3,7 +3,8 @@
 ## Description
    This is a small web app made with C#/ASP.NET as backend
    and Blazor as frontend. There are few web api-s that connect 
-   whole project. Api is documented with swagger.
+   whole project. Api is documented with swagger, tested
+   with postman.
    You can see swager documentation after you start project and
    go to url:http://localhost:5074 in your browser.
 

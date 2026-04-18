@@ -5,5 +5,5 @@ namespace AbySalto.Junior.Application.Interfaces;
 
 public interface IArticleService
 {
-    Task<IEnumerable<ArticleDto>> GetAllArticles();
+    Task<IEnumerable<ArticleDtoBackend>> GetAllArticles();
 }

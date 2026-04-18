@@ -2,15 +2,15 @@
 
 namespace AbySalto.Junior.Application.Dto;
 
-public record OrderDto(
+public record OrderDtoBackend(
     Guid? Id,
     string GuestName,
     DateTimeOffset? OrderDate,
     Status? Status,
-    Payment Payment,
+    PaymentBackend PaymentBackend,
     string Address,
     string PhoneNumber,
     string Notes,
     decimal TotalAmount,
-    List<ArticleDto> Articles
+    List<ArticleDtoBackend> Articles
     );

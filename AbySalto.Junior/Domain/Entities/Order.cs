@@ -12,7 +12,7 @@ public class Order
    public DateTimeOffset OrderTime { get; set; }
 
    public Status Status { get; set; }
-   public Payment Payment { get; set; }
+   public PaymentBackend PaymentBackend { get; set; }
    public string Address { get; set; } = string.Empty; 
    public string PhoneNumber { get; set; }= string.Empty; 
    public string Notes { get; set; }= string.Empty; 

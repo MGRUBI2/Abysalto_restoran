@@ -14,7 +14,10 @@
             
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
-                    <select class="form-select" @onchange="e => {selectedSortType=e.Value.ToString(); ChangeSortType(); }">
+                    <select class="form-select" @onchange="e => { selectedSortType = e.Value.ToString(); ChangeSortType(); }">
+                        
+                        <option value="">Sortiraj sadržaj</option>
+
                         @foreach (var type in sortType)
                         {
                             <option value="@type.Key">@type.Key</option>
@@ -134,6 +137,10 @@
 
     private void ChangeSortType()
     {
+        if (string.IsNullOrEmpty(selectedSortType)){
+            return;
+            }
+        
         orderSort = sortType[selectedSortType];
         orders=orderSort.Sort(orders).ToList();
     }

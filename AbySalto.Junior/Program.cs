@@ -22,7 +22,7 @@ namespace AbySalto.Junior
             builder.Services.AddOpenApi();
             
             
-            builder.Services.AddCors(options =>
+            builder.Services.AddCors(options =>  //M.G: needed for api fetching
             {
                 options.AddPolicy("AllowFetch", policy =>
                 {
@@ -43,7 +43,7 @@ namespace AbySalto.Junior
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));//M.G: changed parts of code to fit for postgresql 
 
             
-            builder.Services.AddControllers() //M.G: removing this allows me to send custom error messages to frontend
+            builder.Services.AddControllers() //M.G: this allows me to send custom error messages to frontend
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
