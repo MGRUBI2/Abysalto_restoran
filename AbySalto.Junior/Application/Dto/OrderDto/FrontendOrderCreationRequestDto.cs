@@ -9,4 +9,4 @@ public record FrontendOrderCreationRequestDto(
     string Address,
     string PhoneNumber,
     string Notes,
-    List<Guid> Articles);
+    List<OrderArticleRequestDto> Articles);

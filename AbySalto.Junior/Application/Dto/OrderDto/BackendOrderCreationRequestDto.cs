@@ -9,5 +9,5 @@ public record BackendOrderCreationRequestDto(
     string Address,
     string PhoneNumber,
     string Notes,
-    List<ArticleResponseDto> Articles
+    List<ArticleDto> Articles
     );

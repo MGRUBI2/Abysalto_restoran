@@ -69,8 +69,9 @@
                             @foreach (var article in order.Articles)
                             {
                                 <li class="list-group-item d-flex justify-content-between">
-                                    @article.Name   
+                                    @article.Name 
                                     <span></span>
+                                    @article.Quantity x
                                 </li>
                             }
                         </ul>
@@ -117,7 +118,7 @@
        public string PhoneNumber{ get; set; }
        public string Notes{ get; set; }
        public decimal TotalAmount{ get; set; }
-       public List<ArticleResponseDto> Articles { get; set; }
+       public List<ArticleDto> Articles { get; set; }
    }
     
     private  List<OrderDto> orders = new();

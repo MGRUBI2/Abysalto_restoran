@@ -33,6 +33,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Notes)
             .HasMaxLength(200);
         builder.HasMany(o => o.Articles)
-            .WithMany();
+            .WithOne(oa => oa.Order)
+            .HasForeignKey(oa => oa.OrderId);
     }
 }

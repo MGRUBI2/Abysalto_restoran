@@ -4,14 +4,15 @@ using AbySalto.Junior.Domain.Entities;
 
 namespace AbySalto.Junior.Application.Mapper;
 
-public class ArticleMapper : IMapper<Article,ArticleResponseDto>
+public class ArticleMapper : IMapper<Article,ArticleDto>
 {
-    public ArticleResponseDto ToDto(Article  article)
+    int defaultQuantity=1;
+    public ArticleDto ToDto(Article  article)
     {
-        return new ArticleResponseDto(article.Id,article.Name,article.Price,article.Description);
+        return new ArticleDto(article.Id,article.Name,article.Price,article.Description,defaultQuantity);
     }
 
-    public Article ToEntity(ArticleResponseDto dto)
+    public Article ToEntity(ArticleDto dto)
     {
         throw new NotImplementedException();
 

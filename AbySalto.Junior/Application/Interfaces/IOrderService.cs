@@ -7,7 +7,7 @@ public interface IOrderService
 {
     Task CreateOrder(FrontendOrderCreationRequestDto Dto);
 
-    Task<IEnumerable<OrderResponseDto>> GetAllOrders();
+    Task<IEnumerable<OrderDto>> GetAllOrders();
 
     Task UpdateOrder(OrderStatusUpdateRequestDto dto);
 
