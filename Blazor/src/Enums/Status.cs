@@ -2,7 +2,7 @@
 
 public enum Status
 {
-    pending,
-   inProgress,
-  Completed 
+  Na_čekanju,
+  U_pripremi,
+  završena 
 }

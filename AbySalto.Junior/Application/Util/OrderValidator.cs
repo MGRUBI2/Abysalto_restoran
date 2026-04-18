@@ -10,33 +10,33 @@ public static class OrderValidator
        
        if (order == null)
        {
-           errorMessage+="Order is empty, ";
+           errorMessage+="Narudžba je prazna ";
        } 
        
        if(order.GuestName == null)
        {
-           errorMessage+="Name is empty, ";
+           errorMessage+="Polje s imenom je prazno, ";
        }
        
        if(order.Address==null)
        {
-           errorMessage+="Address is empty, ";
+           errorMessage+="Polje s adresom je prazno, ";
        }
 
        if (order.PhoneNumber == null)
        {
-           errorMessage+="Phone number is empty, ";
+           errorMessage+="Polje s brojem mobitela je prazno, ";
        }
 
 
       if (!order.PhoneNumber.All(p => char.IsDigit(p) || char.IsWhiteSpace(p)))
       {
-          errorMessage+="Invalid phone number, ";
+          errorMessage+="Neispravan broj mobitela, ";
       }
       
       if (order.Articles == null || order.Articles.Count==0)
       {
-          errorMessage+="No articles chosen, ";
+          errorMessage+="Polje s artiklima je prazno, ";
       }
 
 

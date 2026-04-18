@@ -25,8 +25,6 @@ public class OrderService : IOrderService
     
     public async Task CreateOrder(OrderCreationRequestDto dto)
     {
-        //M.G: depricated, will remove
-        // List<Article> articles = (await _articleRepository.GetArticlesByIdAsync(dto.Articles)).ToList();
 
         var order = new Order
         {
