@@ -5,7 +5,7 @@ namespace AbySalto.Junior.Application.Dto;
 
 public record OrderCreationRequestDto(
     string GuestName,
-    PaymentBackend PaymentBackend,
+    Payment Payment,
     string Address,
     string PhoneNumber,
     string Notes,

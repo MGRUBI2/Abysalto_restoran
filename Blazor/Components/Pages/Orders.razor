@@ -56,7 +56,7 @@
 
                         <div class="mb-3">
                             <strong>Način plaćanja:</strong>
-                            <div class="text-muted">@order.Payment</div>
+                            <div class="text-muted">@order.PaymentFrontend</div>
                         </div>
 
                         <div class="mb-3">
@@ -150,12 +150,12 @@
        public string GuestName{ get; set; }
        public DateTimeOffset OrderDate{ get; set; }
        public Status Status { get; set; }
-       public Payment Payment{ get; set; }
+       public PaymentFrontend PaymentFrontend{ get; set; }
        public string Address{ get; set; }
        public string PhoneNumber{ get; set; }
        public string Notes{ get; set; }
        public decimal TotalAmount{ get; set; }
-       public List<ArticleDto> Articles { get; set; }
+       public List<ArticleFrontendDto> Articles { get; set; }
    }
     
     private  List<OrderMuttableDto> orders = new();

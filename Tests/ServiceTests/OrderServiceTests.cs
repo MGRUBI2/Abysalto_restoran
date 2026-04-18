@@ -13,17 +13,17 @@ namespace Tests.ServiceTests;
 public class OrderServiceTests
 {
     private Mock<IOrderRepository> _orderRepository;
-    private Mock<IMapper<Order, OrderDtoBackend>> _OrderMapper;
+    private Mock<IMapper<Order, OrderDto>> _OrderMapper;
     private OrderService _orderService;
     private Mock<IArticleRepository> _articleRepository;
-    private Mock<IMapper<Article,ArticleDtoBackend>> _articleMapper;
+    private Mock<IMapper<Article,ArticleDto>> _articleMapper;
     
     [SetUp]
     public void Setup()
     {
         _orderRepository = new Mock<IOrderRepository>();
-        _OrderMapper = new Mock<IMapper<Order, OrderDtoBackend>>();
-        _articleMapper = new Mock<IMapper<Article,ArticleDtoBackend>>();
+        _OrderMapper = new Mock<IMapper<Order, OrderDto>>();
+        _articleMapper = new Mock<IMapper<Article,ArticleDto>>();
         _articleRepository = new Mock<IArticleRepository>();
         
         _orderService = new OrderService(
@@ -44,10 +44,10 @@ public class OrderServiceTests
             new Order { Id = Guid.NewGuid(), Name = "Ana" }
         };
 
-        var orderDtos = new List<OrderDtoBackend>
+        var orderDtos = new List<OrderDto>
         {
-            new OrderDtoBackend(orders[0].Id, "Ivan", null, null, PaymentBackend.Cash, "", "", "", 0, new()),
-            new OrderDtoBackend(orders[1].Id, "Ana",   null, null, PaymentBackend.Cash, "", "", "", 0, new())
+            new OrderDto(orders[0].Id, "Ivan", null, null, Payment.Cash, "", "", "", 0, new()),
+            new OrderDto(orders[1].Id, "Ana",   null, null, Payment.Cash, "", "", "", 0, new())
         };
         
         
@@ -74,7 +74,7 @@ public class OrderServiceTests
     {
         var dto = new OrderCreationRequestDto(
             "Ivan",
-            PaymentBackend.Cash,
+            Payment.Cash,
             "Ulica ",
             "0911234567",
             "bez luka",
