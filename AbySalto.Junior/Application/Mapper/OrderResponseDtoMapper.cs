@@ -11,7 +11,7 @@ public class OrderResponseDtoMapper : IMapper<Order,OrderResponseDto>
     {
         decimal totalAmount = order.Articles.Sum(a => a.Price);
 
-        var articlesdto = order.Articles.Select(a =>
+        var articlesDto = order.Articles.Select(a =>
         {
             return new ArticleResponseDto(
                 a.Id,
@@ -32,7 +32,7 @@ public class OrderResponseDtoMapper : IMapper<Order,OrderResponseDto>
              order.PhoneNumber,
              order.Notes,
             totalAmount,
-            articlesdto
+            articlesDto
         );
     }
 

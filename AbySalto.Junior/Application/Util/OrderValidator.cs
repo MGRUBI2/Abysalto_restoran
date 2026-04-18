@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using AbySalto.Junior.Application.Dto;
-using AbySalto.Junior.Domain.Entities;
-using Microsoft.IdentityModel.Tokens;
+﻿using AbySalto.Junior.Application.Dto;
 
 namespace AbySalto.Junior.Application.Util;
 

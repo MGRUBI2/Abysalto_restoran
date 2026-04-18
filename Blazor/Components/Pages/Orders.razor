@@ -1,5 +1,6 @@
 ﻿@page "/orders"
 @inject HttpClient Http
+@using System.Net
 @using AbySalto.Junior.Application.Dto
 @using AbySalto.Junior.Domain.Enums
 @rendermode InteractiveServer
@@ -83,6 +84,14 @@
 
                         <b><hr></b>
                     </div>
+                    
+                    @if (!string.IsNullOrWhiteSpace(message) && message.Length < 150) @*M.G: big messages are from asp.net and are not meant for user *@
+                    {
+                        <div class="alert alert-info">
+                            <span>@message</span>
+                        </div>
+                    }
+                    
                 }
                 <div class="mt-4 d-grid gap-2">
                         <a href="/" class="btn btn-outline-primary">Back to Orders</a>
@@ -95,6 +104,8 @@
 </div>
 
 @code {
+
+    string message = "";
     
    private class OrderDto {
        public Guid Id { get; set; }
@@ -123,6 +134,18 @@
     {
         var order = orders.First(o =>o.Id == id);
 
-        await Http.PutAsJsonAsync($"http://localhost:5074/api/v1/orders/{id}",order);
+        try
+        {
+            var response = await Http.PutAsJsonAsync($"http://localhost:5074/api/v1/orders/{id}", order);
+
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                message = await response.Content.ReadAsStringAsync();
+            }
+        }
+        catch
+        {
+            message = "Error: try again later";
+        }
     }
 }

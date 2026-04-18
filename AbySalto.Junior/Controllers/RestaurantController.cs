@@ -40,7 +40,6 @@ namespace AbySalto.Junior.Controllers
         {
             try
             {
-                
                 return Ok(await _orderService.GetAllOrders());
             }
             catch (DbException e)
@@ -58,9 +57,9 @@ namespace AbySalto.Junior.Controllers
 
                 return Ok();
             } 
-            catch (Exception e)
+            catch
             {
-                return StatusCode(500, "Error with creation of order" + e.Message);
+                return BadRequest("Error with update of order");
             }
         }
     }
