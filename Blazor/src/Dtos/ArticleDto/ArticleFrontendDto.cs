@@ -1,6 +1,6 @@
 ﻿namespace AbySalto.Junior.Application.Dto;
 
-public record ArticleDtoBackend(
+public record ArticleFrontendDto(
     Guid Id,
     string Name,
     decimal Price,

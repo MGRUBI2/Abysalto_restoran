@@ -214,19 +214,19 @@
         public int Quantity{ get; set; }
     }
 
-    public OrderDto mapper()
+    public OrderFrontendDto mapper()
     {
-        return  new OrderDto(
+        return  new OrderFrontendDto(
             null,
             order.GuestName,
             null,
             null,
-            (Payment)order.Payment,
+            (PaymentFrontend)order.Payment,
             order.Address,
             order.PhoneNumber,
             order.Notes,
             0,
-            order.Articles.Select(a => new AbySalto.Junior.Application.Dto.ArticleDto(a.Id,a.Name,a.Price,a.Description,a.Quantity)).ToList()
+            order.Articles.Select(a => new AbySalto.Junior.Application.Dto.ArticleFrontendDto(a.Id,a.Name,a.Price,a.Description,a.Quantity)).ToList()
                 
         );
     }

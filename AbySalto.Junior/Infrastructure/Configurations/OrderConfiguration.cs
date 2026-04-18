@@ -21,7 +21,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Status)
             .HasConversion<string>()
             .IsRequired();
-        builder.Property(o => o.PaymentBackend)
+        builder.Property(o => o.Payment)
             .HasConversion<string>()
             .IsRequired();
         builder.Property(o => o.Address)
