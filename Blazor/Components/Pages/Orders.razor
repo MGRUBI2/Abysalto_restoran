@@ -165,9 +165,7 @@
     protected async override Task OnInitializedAsync()
     {
         orders =  await Http.GetFromJsonAsync<List<OrderMuttableDto>>("http://localhost:5074/api/v1/orders");
-       // orders= orders.OrderByDescending(o => o.TotalAmount).ToList();//M.G: tmp
-       
-       // orders=orderSort.Sort(orders).ToList();
+
     }
 
     private async Task UpdateStatus(Guid id)

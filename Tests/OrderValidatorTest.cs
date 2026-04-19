@@ -1,6 +1,5 @@
 ﻿using AbySalto.Junior.Application.Dto;
 using AbySalto.Junior.Application.Util;
-using AbySalto.Junior.Domain.Entities;
 using AbySalto.Junior.Domain.Enums;
 using FluentAssertions;
 
@@ -14,6 +13,8 @@ public class OrderValidatorTest
   [TestCase(null,0,"ulica 123","123 12 45"," luk!")]
   [TestCase("ivica",0,"ulica 123",null," luk!")]
   [TestCase("ivna ",2,null,"123 12 45"," luk!")]
+  [TestCase("ivnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",2,null,"123 12 45"," luk!")]
+  [TestCase("ivna",2,null,"123 1111111111111111111111111111111111111111111112 45","parmezan")]
   public async Task ShouldThrowException(string? name,Payment payment,string? address,string? number,string? notes)
   {
     
